@@ -1,3 +1,4 @@
+const { text } = require("express");
 const mongoose = require("mongoose");
 
 const likersSchema = new mongoose.Schema({
@@ -18,7 +19,7 @@ const booksSchema = new mongoose.Schema({
     name: String,
     author: String,
     picture: String,
-    shortReview: String, // Changed "Text" to "String"
+    shortReview: String, 
     likers: [likersSchema]
 }, { timestamps: true });
 

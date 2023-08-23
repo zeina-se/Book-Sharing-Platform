@@ -11,7 +11,8 @@ const login = async (req, res)=>{
 
     const {password: hashedPassword, firstName, lastName, email, _id, ...userInfo} = user.toJSON();
     const token = jwt.sign({firstName, lastName, email, _id}, process.env.JWT_SECRET)
-
+   
+    
     res.send({
         token,
         user: userInfo
@@ -19,20 +20,28 @@ const login = async (req, res)=>{
 
 }
 
-const register = async(req, res)=>{
-    const {password} = req.body
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({
+const register = async (req, res) => {
+    const { password } = req.body;
+  
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = new User({
         ...req.body,
         password: hashedPassword
-    });
-
-    user.save()
-
-    res.send(user)
-    
-}
+      });
+  
+      await user.save();
+      res.send(user);
+    } catch (error) {
+      if (error.code === 11000) {
+        // Unique email constraint violation
+        res.status(400).send({ message: "Email already exists" });
+      } else {
+        console.error(error);
+        res.status(500).send({ message: "Internal server error" });
+      }
+    }
+  };
 
 const verify = (_, res)=>{
     res.send("Verfied")

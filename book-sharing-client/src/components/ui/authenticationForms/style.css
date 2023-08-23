@@ -1,0 +1,13 @@
+.header_insta {
+    background-image: url("https://static.cdninstagram.com/rsrc.php/v3/yx/r/WtxJZZ3-9ZP.png");
+    background-position: 0 0;
+    background-size: 176px 186px;
+    width: 174px;
+    height: 50px;
+    background-repeat: no-repeat;
+    display: flex;
+align-self: center; }
+
+.div-with-border{
+    border-style: ridge;
+}

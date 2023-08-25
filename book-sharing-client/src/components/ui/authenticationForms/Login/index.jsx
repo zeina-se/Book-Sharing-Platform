@@ -37,7 +37,7 @@ const LoginForm = ({ onToggle }) => {
 
   return (
     <div className="flex column spaceBetween rounded authenticationBox">
-    <h1>Login</h1>
+    <h1> Macrobooks</h1>
       <div className="spacer-30"></div>
       <Input
         label={"Email"}

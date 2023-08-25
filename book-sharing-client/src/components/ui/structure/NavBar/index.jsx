@@ -1,13 +1,30 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import "./style.css";
 import Input from "../../../base/Input";
 import { localStorageAction } from "../../../../core/config/localstorage";
 
 
 export default function Navbar() {
+  const [username, setUsername] = useState("Taha");
+  const location = useLocation();
+  const navigation = useNavigate();
+
+  const [show, setShow] = useState(true);
+
   const [isNavExpanded, setIsNavExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  
+  useEffect(() => {
+    console.log(location);
+    if (location.pathname === "/") {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  }, [location.pathname]);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -30,6 +47,7 @@ export default function Navbar() {
   };
 
   return (
+    show && (
     <nav className="navigation">
       <a href="/" className="brand-name">
         MacroBook
@@ -78,6 +96,6 @@ export default function Navbar() {
           </ul>
         </div>
       )}
-    </nav>
+    </nav>)
   );
 }

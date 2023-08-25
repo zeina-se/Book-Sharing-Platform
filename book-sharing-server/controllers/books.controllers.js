@@ -1,64 +1,62 @@
 const User = require("../models/users.model.js")
 
-const addBook2 = async (req, res) => {
-  const { name, author, shortReview } = req.body;
-  const userId = req.user._id;
-  const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).send({ message: 'User not found' });
-    }
-    return res.status(404).send({ message: 'User found' });
-
-}
-
-// const addBook = async (req, res) => {
-//   const { name, author, shortReview,picture } = req.body;
-//   try {
-//     // Get the auth id
-//     const userId = req.user._id;
-// console.log(req);
-//     const user = await User.findById(userId);
+// const addBook2 = async (req, res) => {
+//   const { name, author, shortReview } = req.body;
+//   const userId = req.user._id;
+//   const user = await User.findById(userId);
 
 //     if (!user) {
 //       return res.status(404).send({ message: 'User not found' });
 //     }
+//     return res.status(404).send({ message: 'User found' });
 
-//     if (!req.files || !req.files.picture) {
-//       return res.status(400).send({ message: 'No picture found in the request' });
-//     }
+// }
 
-//     // Get the uploaded picture from req.files
-//     const picture = req.files.picture;
+const addBook = async (req, res) => {
+  const { name, author, shortReview } = req.body;
+  try {
+    // Get the auth id
+    const userId = req.user._id;
 
-//     // Generate a unique filename for the uploaded picture
-//     const uniqueFilename = `${Date.now()}-${picture.name}`;
+    const user = await User.findById(userId);
 
-//     // Specify the directory to save the uploaded picture
-//     const uploadDirectory = '../uploads';
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' });
+    }
 
-//     // Save the picture to the uploads directory
-//     picture.mv(`${uploadDirectory}/${uniqueFilename}`);
+   
+    // Get the uploaded picture from req.files
+    const picture = req.picture;
 
-//     // Create the book object
-//     const book = {
-//       name,
-//       author,
-//       picture: uniqueFilename,
-//     };
+    // Generate a unique filename for the uploaded picture
+    const uniqueFilename = `${Date.now()}-${picture.name}`;
 
-//     // Add the book to the user's books
-//     user.books.push(book);
+    // Specify the directory to save the uploaded picture
+    const uploadDirectory = '../uploads';
 
-//     // Save the user with the updated books array
-//     await user.save();
+    // Save the picture to the uploads directory
+    picture.mv(`${uploadDirectory}/${uniqueFilename}`);
 
-//     res.send(user);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send({ message: 'Internal server error' });
-//   }
-// };
+    // Create the book object
+    const book = {
+      name,
+      author,
+      picture: uniqueFilename,
+      shortReview
+    };
+
+    // Add the book to the user's books
+    user.books.push(book);
+
+    // Save the user with the updated books array
+    await user.save();
+
+    res.send(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Internal server error' });
+  }
+};
 
 
    const searchBooks = async (req, res) => {
@@ -76,34 +74,29 @@ const addBook2 = async (req, res) => {
      }
    };
    
-   module.exports = {
-     searchBooks,
-   };
+  const getBooks = async(req, res) => {
+    const {id} = req.params
+  
+    const books = [];
+    const users = await User.find();
+    users.forEach(user=>{
+         books.push(...user.books)
+    })
+
+    if(!id) return res.send(books)
+
+    const book = books.find(book=> book._id === id)
+    return res.send(book)
+}
+
+const getMyBooks = async (req, res)=> {
+    const user = await User.findById(req.user._id);
+
+    res.send(user.books)
+}
 
    module.exports = {
-    addBook2,searchBooks
+    addBook,searchBooks,getBooks,getMyBooks
    };
-// const getStays = async(req, res) => {
-//      const {id} = req.params
+  
    
-//      const stays = [];
-//      const users = await User.find();
-//      users.forEach(user=>{
-//           stays.push(...user.stays)
-//      })
-
-//      if(!id) return res.send(stays)
-
-//      const stay = stays.find(stay=> stay._id === id)
-//      return res.send(stay)
-// }
-
-// const getMyStays = async (req, res)=> {
-//      const user = await User.findById(req.user._id);
-
-//      res.send(user.stays)
-// }
-
-  
-  
-// module.exports = {addBook,getMyStays, getStays}

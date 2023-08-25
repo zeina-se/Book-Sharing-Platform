@@ -14,8 +14,8 @@ const RegisterForm = ({ onToggle }) => {
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
-    full_name: "",
-    username: "",
+    firstName: "",
+    lastName: "",
   });
   const [error, setError] = useState(null);
 
@@ -36,7 +36,7 @@ console.log(credentials);
 
       localStorageAction("access_token", response.authorisation.token);
       
-      navigation("/");
+      onToggle();
         } catch (error) {
       console.log(error);
       setError(error.message);
@@ -45,7 +45,7 @@ console.log(credentials);
 
   return (
     <div className="flex column spaceBetween rounded authenticationBox">
-<h1>Sign Up</h1>
+<h1> Macrobooks</h1>
       <div className="spacer-30"></div>
       <Input
         label={"Email"}
@@ -59,23 +59,24 @@ console.log(credentials);
       />
       <div className="spacer-15"></div>
       <Input
-        label={"Full Name"}
-        placeholder={"Full Name"}
-        onChange={(full_name) =>
+        label={"First Name"}
+        placeholder={"First Name"}
+        onChange={(firstName) =>
           setCredentials({
             ...credentials,
-            full_name,
+            firstName,
           })
         }
       />
       <div className="spacer-15"></div>
+     
       <Input
-        label={"Username"}
-        placeholder={"Username"}
-        onChange={(username) =>
+        label={"Last Name"}
+        placeholder={"last Name"}
+        onChange={(lastName) =>
           setCredentials({
             ...credentials,
-            username,
+            lastName,
           })
         }
       />

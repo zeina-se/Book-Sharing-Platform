@@ -19,55 +19,32 @@ const BookForm = ({ onToggle }) => {
   });
   const [error, setError] = useState(null);
 
-  const handleNameChange = (name) => {
-    setCredentials({
-      ...credentials,
-      picture: name,
-    });
-  };
-  const handleAuthorChange = (author) => {
-    setCredentials({
-      ...credentials,
-      author: author,
-    });
-  };
-  const handleShortReviewChange = (shortReview) => {
-    setCredentials({
-      ...credentials,
-      shortReview: shortReview,
-    });
-  }; const handleFileChange = (picture) => {
+ const handleFileChange = (picture) => {
     setCredentials({
       ...credentials,
       picture: picture,
     });
   };
+
 console.log(credentials);
-  const addBookHandler = async () => {
+
+const addBookHandler = async () => {
+  
     try {
-      const token = localStorageAction("access_token");
-    
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      console.log(credentials);
       const response = await sendRequest({
-        method: "post",
-        route: "http://127.0.0.1:8000/books/add",
-        body: JSON.stringify(credentials),
-        headers: headers,
+        route: "/books/add",
+        method: requestMethods.POST,
+        body: credentials,
       });
-      console.log(response);
 
-      // localStorageAction("access_token", response.authorisation.token);
-      
-      // navigation("/posts");
 
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    }
-  };
+    const responseData = await response.json();
+    console.log(responseData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
   return (
     <div className="flex column spaceBetween rounded authenticationBox">
@@ -105,13 +82,16 @@ console.log(credentials);
         }
       />
       <div className="spacer-15"></div>
+      <form action="/books/add" method="post" encType="multipart/form-data">
+
       <InputFile
         id="myfile"
         name="picture"
         onChange={handleFileChange}
-        placeholder="Add picture.."
+        placeholder="Add picture..."
         required
       />
+      </form>
       <div className="spacer-30"></div>
 
       <Button

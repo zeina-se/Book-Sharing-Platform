@@ -20,11 +20,9 @@ app.use("/auth", authRouter)
 
 const bookRouter = require("./routes/books.routes");
 app.use("/books", bookRouter)
-const fileUpload = require('express-fileupload');
 
-// Enable file uploads
-app.use(fileUpload());
-
+const followerRouter = require("./routes/followers.routes");
+app.use("/followers", followerRouter)
 
 
 app.listen(8000, (err)=>{
